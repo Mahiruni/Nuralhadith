@@ -209,3 +209,83 @@ body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:100;box
 .daily-card,.reader-card,.library-panel,.result-card,.library-card,.topic-card,.study-panel,.source-hero,.report-card,.offline-panel,.skeleton{border-radius:16px}
 .daily-card{border-left:3px solid var(--gold)}
 .offline-panel,.source-hero,.report-card,.study-panel{box-shadow:var(--shadow)}
+
+
+/* Quiet motion system — calm, tactile, performance-conscious */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:page-old .24s ease both}
+::view-transition-new(root){animation:page-new .42s var(--ease-soft) both}
+@keyframes page-old{to{opacity:0;transform:scale(.995)}}
+@keyframes page-new{from{opacity:0;transform:translateY(5px) scale(.998)}to{opacity:1;transform:none}}
+
+html{scroll-behavior:smooth}
+button,a,select,.chapter-row,.result-card,.library-card,.topic-card,.daily-card,.reader-card{will-change:auto}
+button:active,a:active{transform:translateY(1px) scale(.985)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:4px;
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 13%,transparent);
+}
+button:disabled{cursor:not-allowed;opacity:.58}
+
+.page-transition{animation:quiet-enter .48s var(--ease-soft) both}
+@keyframes quiet-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.skeleton{position:relative;overflow:hidden}
+.skeleton:after{
+  content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--paper) 58%,white),transparent);
+  animation:skeleton-shimmer 1.8s ease-in-out infinite;
+}
+@keyframes skeleton-shimmer{to{transform:translateX(100%)}}
+.skeleton span{background:color-mix(in srgb,var(--line) 82%,var(--paper));}
+
+.empty{gap:9px;position:relative;overflow:hidden}
+.empty:before{
+  content:"";width:38px;height:38px;border:1px solid var(--gold-soft);border-radius:50%;
+  box-shadow:0 0 0 8px color-mix(in srgb,var(--gold) 5%,transparent);
+}
+.empty:after{
+  content:"";position:absolute;width:1px;height:16px;background:var(--gold);
+  top:calc(50% - 20px);opacity:.5;
+}
+
+.reader-card,.daily-card,.library-panel,.result-card,.topic-card,.study-panel{
+  contain:layout paint;
+}
+.reader-card:hover{box-shadow:0 24px 70px rgba(38,49,42,.09)}
+.result-card:hover,.topic-card:hover{border-color:var(--gold-soft)}
+.reader-card details summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.reader-card details summary::-webkit-details-marker{display:none}
+.reader-card details summary:after{content:"+";color:var(--gold);font-size:15px;font-weight:400;transition:transform .3s var(--ease)}
+.reader-card details[open] summary:after{transform:rotate(45deg)}
+.reader-card details>p,.reader-card details>div{animation:detail-open .32s var(--ease-soft) both}
+@keyframes detail-open{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+.experience-toast{pointer-events:none}
+.motion-glyph{animation:glyph-breathe 3.8s ease-in-out infinite}
+@keyframes glyph-breathe{0%,100%{opacity:.72;transform:scale(1)}50%{opacity:1;transform:scale(1.025)}}
+
+[data-theme="dark"] body,[data-theme="dark"] .topbar,[data-theme="dark"] .pagebar,[data-theme="dark"] .readerbar{
+  transition:background-color .35s ease,color .35s ease,border-color .35s ease;
+}
+[data-theme="dark"] .topbar,[data-theme="dark"] .pagebar,[data-theme="dark"] .readerbar{
+  background:color-mix(in srgb,var(--cream) 90%,transparent);
+}
+
+@media(max-width:760px){
+  .search-results{grid-template-columns:1fr}
+  .reader-card:hover,.daily-card:hover,.result-card:hover,.topic-card:hover{transform:none}
+  .home-hero:before,.home-hero:after{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*:before,*:after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+    view-transition-name:none!important;
+  }
+  ::view-transition-old(root),::view-transition-new(root){animation:none!important}
+}
