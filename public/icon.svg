@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0d4b3f"/><circle cx="256" cy="256" r="150" fill="none" stroke="#b18a43" stroke-width="8"/><text x="256" y="310" text-anchor="middle" fill="#f8f4ea" font-size="150" font-family="serif">ﷺ</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" rx="128" fill="#174f42"/>
+<circle cx="256" cy="256" r="166" fill="none" stroke="#d1b477" stroke-width="7" opacity=".9"/>
+<circle cx="256" cy="256" r="146" fill="none" stroke="#d1b477" stroke-width="2" opacity=".45"/>
+<text x="256" y="315" text-anchor="middle" fill="#f7f2e8" font-size="148" font-family="serif">ﷺ</text>
+</svg>
