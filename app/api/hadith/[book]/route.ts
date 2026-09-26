@@ -1,6 +1,6 @@
 import {NextResponse} from "next/server";
-import {getBook} from "../../../lib/source";
-import {collections} from "../../../lib/collections";
+import {getBook} from "../../../../lib/source";
+import {collections} from "../../../../lib/collections";
 
 export async function GET(_: Request, {params}: {params: Promise<{book: string}>}) {
   const {book} = await params;
