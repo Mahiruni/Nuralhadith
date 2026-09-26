@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { LanguageProvider } from "../components/LanguageProvider";
 import ExperienceLayer from "../components/ExperienceLayer";
+import OfflineManager from "../components/OfflineManager";
 
 export const metadata: Metadata = {
   title: "Nur al-Hadith — نور الحديث",
@@ -17,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" dir="ltr">
       <body>
         <LanguageProvider>
-          <ExperienceLayer />
+          <ExperienceLayer /><OfflineManager />
           <div id="main-content">{children}</div>
         </LanguageProvider>
       </body>
