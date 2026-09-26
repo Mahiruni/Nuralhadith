@@ -8,7 +8,48 @@ type OfflineHadith={id?:string|number;idInBook?:number;chapterId?:number;arabic?
 type OfflineStoredBook={id:string;data?:{chapters?:Array<{id:number;english?:string}>;hadiths?:OfflineHadith[]}};
 export default function SearchPage(){
  const{t,locale}=useLanguage();const[onlySahih,setOnlySahih]=useState(false);const[q,setQ]=useState("");const[collection,setCollection]=useState("");const[results,setResults]=useState<Result[]>([]);const[loading,setLoading]=useState(false);const[message,setMessage]=useState("");
- async function search(e?:React.FormEvent){e?.preventDefault();if(q.trim().length<2){setMessage(t("enterTwo"));return}setLoading(true);setMessage("");try{if(typeof navigator!=="undefined"&&!navigator.onLine){const rows=(await readAllOfflineBooks()) as OfflineStoredBook[];const needle=q.trim().toLocaleLowerCase();const local=rows.filter(x=>!collection||x.id===collection).flatMap(x=>{const ch=new Map((x.data?.chapters||[]).map(c=>[c.id,c] as const));return (x.data?.hadiths||[]).filter(h=>[h.arabic,h.english?.text,h.english?.narrator].filter(Boolean).join(" ").toLocaleLowerCase().includes(needle)).map(h=>({id:h.id,collection:x.id,collection_name:collections.find(c=>c.id===x.id)?.name,hadithnumber:h.idInBook,arabic:h.arabic,english:h.english?.text,grade:h.grade,chapter:ch.get(h.chapterId)?.english||""}));});setResults(local.slice(0,60));setMessage(local.length?"":"No matching downloaded Hadiths found.")}else{const r=await fetch("/api/search?q="+encodeURIComponent(q.trim())+"&collection="+encodeURIComponent(collection));const d=await r.json();setResults(d.results||d.data||[]);setMessage(d.message||"")}}catch{setMessage(t("unavailable"))}finally{setLoading(false)}}
+ async function search(e?:React.FormEvent){
+  e?.preventDefault();
+  if(q.trim().length<2){setMessage(t("enterTwo"));return}
+  setLoading(true);setMessage("");
+  try{
+   if(typeof navigator!=="undefined"&&!navigator.onLine){
+    const rows=await readAllOfflineBooks();
+    const needle=q.trim().toLocaleLowerCase();
+    const local:Result[]=[];
+    for(const stored of rows as OfflineStoredBook[]){
+     if(collection&&stored.id!==collection) continue;
+     const chapters=stored.data?.chapters ?? [];
+     const chapterMap=new Map<number,{id:number;english?:string}>();
+     for(const chapter of chapters) chapterMap.set(chapter.id,chapter);
+     const hadiths:OfflineHadith[]=stored.data?.hadiths ?? [];
+     for(const h of hadiths){
+      const haystack=[h.arabic,h.english?.text,h.english?.narrator].filter((value):value is string=>typeof value==="string").join(" ").toLocaleLowerCase();
+      if(!haystack.includes(needle)) continue;
+      local.push({
+       id:h.id,
+       collection:stored.id,
+       collection_name:collections.find(c=>c.id===stored.id)?.name,
+       hadithnumber:h.idInBook,
+       arabic:h.arabic,
+       english:h.english?.text,
+       grade:h.grade,
+       chapter:chapterMap.get(h.chapterId ?? -1)?.english||""
+      });
+      if(local.length>=60) break;
+     }
+     if(local.length>=60) break;
+    }
+    setResults(local);
+    setMessage(local.length?"":"No matching downloaded Hadiths found.");
+   }else{
+    const r=await fetch("/api/search?q="+encodeURIComponent(q.trim())+"&collection="+encodeURIComponent(collection));
+    const d=await r.json();
+    setResults(d.results||d.data||[]);
+    setMessage(d.message||"");
+   }
+  }catch{setMessage(t("unavailable"))}finally{setLoading(false)}
+ }
  return <main className="shell"><header className="pagebar"><Link href="/" className="brand-link">✦ <span>Nur al-Hadith</span><small>نور الحديث</small></Link><div style={{display:"flex",alignItems:"center",gap:10}}><LanguageSwitcher/><Link href="/collections" className="quiet-link">{t("collections")}</Link></div></header>
  <div className="page-content search-page"><div className="eyebrow">{t("search")}</div><h1 className="page-title">{t("findHadith")}</h1><p className="lead">{t("searchHint")}</p>
  <form className="search-form" onSubmit={search}><input value={q} onChange={e=>setQ(e.target.value)} placeholder={t("searchPlaceholder")} autoFocus/><select value={collection} onChange={e=>setCollection(e.target.value)} aria-label={t("collections")}><option value="">{t("allCollections")}</option>{collections.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select><button type="submit">{loading?t("searching"):t("searchButton")}</button><label className="filter-toggle"><input type="checkbox" checked={onlySahih} onChange={e=>setOnlySahih(e.target.checked)}/><span>{t("onlySahih")}</span></label></form>
