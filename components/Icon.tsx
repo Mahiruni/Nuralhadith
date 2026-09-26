@@ -1,0 +1,8 @@
+"use client";
+
+type IconName="home"|"library"|"search"|"bookmark"|"sun"|"moon"|"refresh"|"arrowUpRight"|"save"|"check"|"play"|"note"|"share"|"close";
+export default function Icon({name,size=16,className=""}:{name:IconName;size?:number;className?:string}){
+ const common={width:size,height:size,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:1.55,strokeLinecap:"round" as const,strokeLinejoin:"round" as const,ariaHidden:true,className:"ui-icon "+className};
+ const p:any={home:<><path d="m3 10 9-7 9 7"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-7h6v7"/></>,library:<><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5z"/><path d="M4 5.5v12"/><path d="M8 7h8M8 11h8"/></>,search:<><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></>,bookmark:<><path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-3.7L6 21z"/></>,sun:<><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></>,moon:<path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.7 8.7 0 1 0 20.5 15.2Z"/>,refresh:<><path d="M20 11a8 8 0 0 0-14.9-4"/><path d="M4 3v4h4"/><path d="M4 13a8 8 0 0 0 14.9 4"/><path d="M20 21v-4h-4"/></>,arrowUpRight:<><path d="M7 17 17 7"/><path d="M8 7h9v9"/></>,save:<><path d="M5 4h12l2 2v14H5z"/><path d="M8 4v6h8V4"/><path d="M8 20v-6h8v6"/></>,check:<path d="m5 12 4 4L19 6"/>,play:<path d="m8 5 11 7-11 7z"/>,note:<><path d="M6 3h12v18H6z"/><path d="M9 7h6M9 11h6M9 15h4"/></>,share:<><path d="M8 12h8"/><path d="m13 7 5 5-5 5"/><path d="M5 5v14"/></>,close:<><path d="m6 6 12 12M18 6 6 18"/></>};
+ return <svg {...common}>{p[name]}</svg>;
+}
