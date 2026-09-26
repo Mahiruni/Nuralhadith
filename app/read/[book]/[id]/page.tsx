@@ -8,6 +8,7 @@ import {useLanguage} from "../../../../components/LanguageProvider";
 import LanguageSwitcher from "../../../../components/LanguageSwitcher";
 import {getVerifiedTranslation} from "../../../../lib/verifiedTranslations";
 import {GRADE_INFO,normalizeGrade,SOURCE_VERSION} from "../../../../lib/trust";
+import {readOfflineBook} from "../../../../lib/offlineDb";
 
 export default function Reader(){
  const{t,locale}=useLanguage();const{book,id}=useParams<{book:string;id:string}>();const c=collections.find(x=>x.id===book);
