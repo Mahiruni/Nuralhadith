@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Nur al-Hadith — نور الحديث",
   description: "A calm, source-aware digital library for reading hadith.",
   manifest: "/manifest.webmanifest",
-  themeColor: "#174f42",
+  themeColor: "#0F3D2E",
   icons: { icon: "/icon.svg" },
   viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
 };
