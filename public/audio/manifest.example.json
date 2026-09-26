@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0",
+  "recordings": [
+    {
+      "id": "bukhari-1-ar",
+      "collection": "bukhari",
+      "hadithNumber": "1",
+      "language": "ar",
+      "url": "",
+      "reciter": "",
+      "rightsHolder": "",
+      "licenseStatus": "permission-required",
+      "license": "",
+      "licenseUrl": "",
+      "permissionReference": "",
+      "permittedUses": [],
+      "attribution": "",
+      "verifiedAt": "",
+      "sha256": ""
+    }
+  ]
+}
