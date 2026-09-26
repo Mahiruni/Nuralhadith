@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Icon from "./Icon";
 
 export default function ExperienceLayer() {
   const [progress, setProgress] = useState(0);
@@ -30,10 +31,10 @@ export default function ExperienceLayer() {
     <a className="skip-link" href="#main-content">Skip to content</a>
     {toast && <div className="experience-toast" role="status" aria-live="polite">{toast}</div>}
     <nav className="mobile-nav" aria-label="Primary">
-      <Link href="/" aria-label="Home"><span>⌂</span><small>Home</small></Link>
-      <Link href="/collections" aria-label="Collections"><span>◫</span><small>Library</small></Link>
-      <Link href="/search" aria-label="Search"><span>⌕</span><small>Search</small></Link>
-      <Link href="/library" aria-label="My library"><span>♡</span><small>Saved</small></Link>
+      <Link href="/" aria-label="Home"><Icon name="home" size={17}/><small>Home</small></Link>
+      <Link href="/collections" aria-label="Collections"><Icon name="library" size={17}/><small>Library</small></Link>
+      <Link href="/search" aria-label="Search"><Icon name="search" size={17}/><small>Search</small></Link>
+      <Link href="/library" aria-label="My library"><Icon name="bookmark" size={17}/><small>Saved</small></Link>
     </nav>
   </>;
 }
