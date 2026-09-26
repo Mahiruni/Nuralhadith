@@ -1,0 +1,2 @@
+import {NextResponse} from 'next/server';
+export async function GET(_req:Request,{params}:{params:Promise<{book:string;id:string}>}){const{book,id}=await params;const base=process.env.HADITH_API_BASE||'https://alfurqan.online';const res=await fetch(`${base}/api/v1/hadith/${encodeURIComponent(book)}/hadith/${encodeURIComponent(id)}`,{next:{revalidate:86400}});if(!res.ok)return NextResponse.json({error:'Hadith unavailable.'},{status:res.status});return NextResponse.json(await res.json())}
