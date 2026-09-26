@@ -38,7 +38,7 @@ export default function ExperienceLayer() {
       const important = /save|bookmark|play|pause|download|offline|theme|dark|light|note|language|copy|share|retry/.test(label);
       if (important) gentleHaptic(label.includes("download") || label.includes("saved") ? "success" : "light");
     };
-    const onLanguage = () => gentleHaptic("light");
+    const onLanguage = (event: Event) => { if ((event.target as HTMLElement | null)?.tagName === "SELECT") gentleHaptic("light"); };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("nur:toast", onToast);
