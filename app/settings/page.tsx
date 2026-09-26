@@ -1,0 +1,31 @@
+'use client';
+
+import Link from "next/link";
+import { useLanguage } from "../../components/LanguageProvider";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
+
+export default function SettingsPage() {
+  const { t, locale } = useLanguage();
+  return (
+    <main className="shell">
+      <header className="pagebar">
+        <Link href="/" className="brand-link">← <span>Nur al-Hadith</span><small>نور الحديث</small></Link>
+        <LanguageSwitcher />
+      </header>
+      <div className="page-content">
+        <div className="eyebrow">{t("settings")}</div>
+        <h1 className="page-title">{t("settings")}</h1>
+        <p className="lead">{t("translationNotice")}</p>
+        <section className="library-panel">
+          <h2>{t("language")}</h2>
+          <LanguageSwitcher />
+          <p className="translation-notice">{locale === "en" ? "Your preferred language is remembered on this device." : t("localStorage")}</p>
+        </section>
+        <section className="library-panel">
+          <h2>{t("verifiedOnly")}</h2>
+          <p className="translation-notice">{t("translationNotice")}</p>
+        </section>
+      </div>
+    </main>
+  );
+}
