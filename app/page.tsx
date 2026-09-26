@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useMemo,useState} from 'react';
-import {collections} from '@/lib/collections';
-import {sampleHadith} from '@/lib/sample';
+import {collections} from '../lib/collections';
+import {sampleHadith} from '../lib/sample';
 export default function Home(){const[dark,setDark]=useState(false),[saved,setSaved]=useState(false),[arabic,setArabic]=useState(true),[english,setEnglish]=useState(true),[font,setFont]=useState(1),[query,setQuery]=useState(''),[notes,setNotes]=useState(''),[random,setRandom]=useState(sampleHadith);
 useEffect(()=>{const t=localStorage.getItem('nur-theme');const n=localStorage.getItem('nur-note');if(t==='dark')setDark(true);if(n)setNotes(n)},[]);useEffect(()=>{document.documentElement.dataset.theme=dark?'dark':'light';localStorage.setItem('nur-theme',dark?'dark':'light')},[dark]);useEffect(()=>localStorage.setItem('nur-note',notes),[notes]);
 const filtered=useMemo(()=>collections.filter(c=>`${c.name} ${c.arabic}`.toLowerCase().includes(query.toLowerCase())),[query]);
