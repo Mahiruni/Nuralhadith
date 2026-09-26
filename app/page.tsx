@@ -19,7 +19,7 @@ export default function Home(){
   return <main className="home">
     <header className="topbar">
       <Link href="/" className="brand"><span>✦</span><div><b>Nur al-Hadith</b><small>نور الحديث</small></div></Link>
-      <nav><Link href="/collections">{t("collections")}</Link><Link href="/search">{t("search")}</Link><Link href="/library">{t("library")}</Link><LanguageSwitcher/><button onClick={()=>setDark(!dark)} aria-label={t("theme")}>{dark?"☀":"☾"}</button></nav>
+      <nav><Link href="/collections">{t("collections")}</Link><Link href="/search">{t("search")}</Link><Link href="/library">{t("library")}</Link><Link href="/settings">{t("settings")}</Link><LanguageSwitcher/><button onClick={()=>setDark(!dark)} aria-label={t("theme")}>{dark?"☀":"☾"}</button></nav>
     </header>
     <section className="home-hero"><div><div className="eyebrow">نور الحديث · A DIGITAL HADITH LIBRARY</div><h1>Read the Sunnah<br/><em>with presence.</em></h1><p>A quiet, carefully structured place to read Arabic hadith and verified translations across eight major collections.</p><div className="hero-actions"><Link href="/collections" className="primary">{t("explore")}</Link><button className="secondary" onClick={random}>{t("random")} ↗</button></div></div><div className="hero-mark" aria-hidden="true">ﷺ</div></section>
     <section className="daily"><div className="section-head"><div><span className="eyebrow">{t("today")}</span><h2>{t("dailyTitle")}</h2></div><button onClick={random}>{loading?t("loading"):t("another")} ↻</button></div>
