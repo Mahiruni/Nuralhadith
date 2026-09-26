@@ -4,5 +4,81 @@ import {useLanguage} from "./LanguageProvider";
 import {buildTracks,type AudioMode} from "../lib/audio";
 import {useAudio} from "./AudioProvider";
 import {readOfflineAudio,saveOfflineAudio,deleteOfflineAudio} from "../lib/offlineDb";
+
 type Props={book:string;number:string|number;onNext?:()=>void;onPrevious?:()=>void};
-export default function AudioPlayer({book,number,onNext,onPrevious}:Props){const{locale}=useLanguage();const audio=useAudio();const[open,setOpen]=useState(false);const[mode,setMode]=useState<AudioMode>("arabic");const[sleep,setSleep]=useState(false);const[offline,setOffline]=useState(false);const[downloading,setDownloading]=useState(false);const[available,setAvailable]=useState(false);const[translationAvailable,setTranslationAvailable]=useState(false);const bilingualStage=useRef<"ar"|"translation"|"done">("done");const tracks=useMemo(()=>buildTracks(book,number,locale),[book,number,locale]);const active=audio.track?.book===book&&audio.track?.number===String(number);useEffect(()=>{readOfflineAudio(ar.id).then(x=>setOffline(!!x)).catch(()=>setOffline(false));fetch("/api/audio?book="+encodeURIComponent(book)+"&number="+encodeURIComponent(String(number))).then(r=>r.ok?r.json():null).then(d=>{setAvailable(!!d?.tracks?.find((x:any)=>x.language==="ar"&&x.available));setTranslationAvailable(!!d?.tracks?.find((x:any)=>x.language===tr.language&&x.available))}).catch(()=>setAvailable(false))},[ar.id,book,number]);const current=active?audio.track:null;const ar=tracks.find(x=>x.language==="ar")!;const tr=tracks.find(x=>x.language===(locale==="ar"?"en":locale))||tracks.find(x=>x.language==="en")!;const play=async(m=mode)=>{try{if(m==="translation"&&!translationAvailable)return;if(m==="bilingual"&&!translationAvailable)return;if(m==="bilingual"){bilingualStage.current="ar";await audio.playTrack(ar as any,m)}else{bilingualStage.current="done";await audio.playTrack((m==="translation"?tr:ar) as any,m)}setOpen(true)}catch{setOpen(true)}};useEffect(()=>{if(active)setOpen(true)},[active]);useEffect(()=>{if(mode!=="bilingual"||!active)return;const timer=setInterval(()=>{if(!audio.playing&&audio.duration>0&&audio.position>=audio.duration-.25&&bilingualStage.current==="ar"){bilingualStage.current="translation";audio.playTrack(tr as any,"translation").catch(()=>{})}},350);return()=>clearInterval(timer)},[mode,active,audio.playing,audio.duration,audio.position,tr]);const pct=audio.duration?audio.position/audio.duration*100:0;return <section className={"audio-dock"+(open?" is-open":"")} aria-label="Hadith audio player"><div className="audio-dock-main"><button className="audio-play" onClick={()=>active?audio.toggle().catch(()=>play()):play()} aria-label={audio.playing&&active?"Pause audio":"Play audio"} disabled={!available&&!offline}>{audio.playing&&active?"Ⅱ":"▶"}</button><div className="audio-meta"><div className="audio-kicker">Listen · {String(number)}</div><strong>{available||offline?(current?.label||"Arabic recitation"):"Arabic recording not available"}</strong><div className="audio-progress"><span style={{width:pct+"%"}}/></div><input className="audio-seek" type="range" min="0" max={audio.duration||1} step=".1" value={active?audio.position:0} onChange={e=>audio.seek(Number(e.target.value))} aria-label="Audio position"/></div><button className="audio-expand" onClick={()=>setOpen(!open)}>{open?"⌄":"⌃"}</button></div>{open&&<div className="audio-controls"><div className="audio-modes">{(["arabic","translation","bilingual"] as AudioMode[]).map(m=><button key={m} className={mode===m?"active":""} onClick={()=>{setMode(m);play(m)}}>{m==="arabic"?"Arabic":m==="translation"?(translationAvailable?"Translation":"Translation unavailable"):(translationAvailable?"Arabic + translation":"Arabic + translation unavailable")}</button>)}</div><div className="audio-row"><button onClick={onPrevious}>← Previous</button><button onClick={()=>play()}>{audio.playing&&active?"Playing":"Play"}</button><button onClick={onNext}>Next →</button></div><div className="audio-row audio-secondary"><label>Speed <select value={audio.speed} onChange={e=>audio.setSpeed(Number(e.target.value))}>{[.75,1,1.25,1.5].map(v=><option key={v} value={v}>{v}×</option>)}</select></label><label>Sleep <select value={sleep?"30":"off"} onChange={e=>{const v=e.target.value;setSleep(v!=="off");audio.setSleep(v==="off"?null:Number(v))}}><option value="off">Off</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select></label><button onClick={async()=>{if(offline){await deleteOfflineAudio(ar.id);setOffline(false);return}setDownloading(true);try{const r=await fetch(ar.url);if(!r.ok)throw new Error();const b=await r.blob();await saveOfflineAudio(ar.id,b);setOffline(true)}catch{}finally{setDownloading(false)}}}>{downloading?"Saving…":offline?"Remove offline":"Download audio"}</button><button onClick={audio.stop}>Close</button></div><p className="audio-note">Only explicitly supplied recordings are presented as available. No synthetic speech is labelled as prophetic recitation.</p></div>}</section>}
+
+export default function AudioPlayer({book,number,onNext,onPrevious}:Props){
+  const{locale}=useLanguage();
+  const audio=useAudio();
+  const[open,setOpen]=useState(false);
+  const[mode,setMode]=useState<AudioMode>("arabic");
+  const[sleep,setSleep]=useState(false);
+  const[offline,setOffline]=useState(false);
+  const[downloading,setDownloading]=useState(false);
+  const[available,setAvailable]=useState(false);
+  const[translationAvailable,setTranslationAvailable]=useState(false);
+  const bilingualStage=useRef<"ar"|"translation"|"done">("done");
+  const tracks=useMemo(()=>buildTracks(book,number,locale),[book,number,locale]);
+  const ar=tracks.find(x=>x.language==="ar")!;
+  const tr=tracks.find(x=>x.language===(locale==="ar"?"en":locale))||tracks.find(x=>x.language==="en")!;
+  const active=audio.track?.book===book&&audio.track?.number===String(number);
+  const current=active?audio.track:null;
+
+  useEffect(()=>{
+    let cancelled=false;
+    readOfflineAudio(ar.id).then(x=>{if(!cancelled)setOffline(!!x)}).catch(()=>{if(!cancelled)setOffline(false)});
+    fetch("/api/audio?book="+encodeURIComponent(book)+"&number="+encodeURIComponent(String(number)))
+      .then(r=>r.ok?r.json():null)
+      .then(d=>{if(cancelled)return;setAvailable(!!d?.tracks?.find((x:any)=>x.language==="ar"&&x.available));setTranslationAvailable(!!d?.tracks?.find((x:any)=>x.language===tr.language&&x.available))})
+      .catch(()=>{if(!cancelled){setAvailable(false);setTranslationAvailable(false)}});
+    return()=>{cancelled=true};
+  },[ar.id,book,number,tr.language]);
+
+  const play=async(m=mode)=>{
+    try{
+      if(m==="translation"&&!translationAvailable)return;
+      if(m==="bilingual"&&!translationAvailable)return;
+      if(m==="bilingual"){bilingualStage.current="ar";await audio.playTrack(ar as any,m)}
+      else{bilingualStage.current="done";await audio.playTrack((m==="translation"?tr:ar) as any,m)}
+      setOpen(true);
+    }catch{setOpen(true)}
+  };
+
+  useEffect(()=>{if(active)setOpen(true)},[active]);
+  useEffect(()=>{
+    if(mode!=="bilingual"||!active)return;
+    const timer=setInterval(()=>{
+      if(!audio.playing&&audio.duration>0&&audio.position>=audio.duration-.25&&bilingualStage.current==="ar"){
+        bilingualStage.current="translation";
+        audio.playTrack(tr as any,"translation").catch(()=>{});
+      }
+    },350);
+    return()=>clearInterval(timer);
+  },[mode,active,audio.playing,audio.duration,audio.position,tr]);
+
+  const pct=audio.duration?audio.position/audio.duration*100:0;
+  const canPlay=available||offline;
+  return <section className={"audio-dock"+(open?" is-open":"")} aria-label="Hadith audio player">
+    <div className="audio-dock-main">
+      <button className="audio-play" onClick={()=>active?audio.toggle().catch(()=>play()):play()} aria-label={audio.playing&&active?"Pause audio":"Play audio"} disabled={!canPlay}>{audio.playing&&active?"Ⅱ":"▶"}</button>
+      <div className="audio-meta"><div className="audio-kicker">Listen · {String(number)}</div><strong>{canPlay?(current?.label||"Arabic recitation"):"Arabic recording not available"}</strong><div className="audio-progress"><span style={{width:pct+"%"}}/></div><input className="audio-seek" type="range" min="0" max={audio.duration||1} step=".1" value={active?audio.position:0} onChange={e=>audio.seek(Number(e.target.value))} aria-label="Audio position"/></div>
+      <button className="audio-expand" onClick={()=>setOpen(!open)}>{open?"⌄":"⌃"}</button>
+    </div>
+    {open&&<div className="audio-controls">
+      <div className="audio-modes">
+        {(["arabic","translation","bilingual"] as AudioMode[]).map(m=>{
+          const enabled=m==="arabic"?canPlay:translationAvailable;
+          return <button key={m} className={mode===m?"active":""} disabled={!enabled} onClick={()=>{setMode(m);play(m)}}>{m==="arabic"?"Arabic":m==="translation"?(translationAvailable?"Translation":"Translation unavailable"):(translationAvailable?"Arabic + translation":"Arabic + translation unavailable")}</button>;
+        })}
+      </div>
+      <div className="audio-row"><button onClick={onPrevious}>← Previous</button><button onClick={()=>play()} disabled={!canPlay}>{audio.playing&&active?"Playing":"Play"}</button><button onClick={onNext}>Next →</button></div>
+      <div className="audio-row audio-secondary">
+        <label>Speed <select value={audio.speed} onChange={e=>audio.setSpeed(Number(e.target.value))}>{[.75,1,1.25,1.5].map(v=><option key={v} value={v}>{v}×</option>)}</select></label>
+        <label>Sleep <select value={sleep?"30":"off"} onChange={e=>{const v=e.target.value;setSleep(v!=="off");audio.setSleep(v==="off"?null:Number(v))}}><option value="off">Off</option><option value="15">15 min</option><option value="30">30 min</option><option value="60">60 min</option></select></label>
+        <button disabled={!available&&!offline} onClick={async()=>{if(offline){await deleteOfflineAudio(ar.id);setOffline(false);return}setDownloading(true);try{const r=await fetch(ar.url);if(!r.ok)throw new Error();const b=await r.blob();await saveOfflineAudio(ar.id,b);setOffline(true)}catch{}finally{setDownloading(false)}}}>{downloading?"Saving…":offline?"Remove offline":"Download audio"}</button>
+        <button onClick={audio.stop}>Close</button>
+      </div>
+      <p className="audio-note">Only explicitly supplied recordings are presented as available. No synthetic speech is labelled as prophetic recitation.</p>
+    </div>}
+  </section>
+}
