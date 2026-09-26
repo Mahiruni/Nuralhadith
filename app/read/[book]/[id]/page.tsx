@@ -1,5 +1,10 @@
 'use client';
-import Link from "next/link"; import {useEffect,useState} from "react"; import {useParams,useRouter} from "next/navigation"; import {collections} from "../../../lib/collections"; import type {Hadith} from "../../../lib/types";
+import Link from "next/link";
+import {useEffect,useState} from "react";
+import {useParams,useRouter} from "next/navigation";
+import {collections} from "../../../../lib/collections";
+import type {Hadith} from "../../../../lib/types";
+
 export default function Reader(){const{book,id}=useParams<{book:string;id:string}>();const router=useRouter();const c=collections.find(x=>x.id===book);const[h,setH]=useState<Hadith|null>(null);const[chapter,setChapter]=useState<Hadith[]>([]);const[continuous,setContinuous]=useState(false);const[loading,setLoading]=useState(true);const[error,setError]=useState("");const[mode,setMode]=useState<"bilingual"|"arabic"|"english">("bilingual");const[size,setSize]=useState(1);const[saved,setSaved]=useState(false);const[note,setNote]=useState("");const noteKey="nur-note-"+book+"-"+id;
 useEffect(()=>{setLoading(true);fetch("/api/hadith/"+book+"/"+id).then(async r=>{if(!r.ok)throw new Error();return r.json()}).then(d=>{const x=d.hadith||d;setH({...x,collection:book,number:x.idInBook||x.id||id,source:c?.name});setError("");localStorage.setItem("nur-last",JSON.stringify({...x,collection:book,number:x.idInBook||x.id||id,source:c?.name}))}).catch(()=>setError("This hadith could not be loaded.")).finally(()=>setLoading(false));},[book,id,c?.name]);
 useEffect(()=>{const s=JSON.parse(localStorage.getItem("nur-saved")||"[]");setSaved(s.includes(book+"/"+id));setNote(localStorage.getItem(noteKey)||"")},[book,id,noteKey]);useEffect(()=>{if(note)localStorage.setItem(noteKey,note)},[note,noteKey]);
