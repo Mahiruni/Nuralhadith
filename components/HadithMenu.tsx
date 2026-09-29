@@ -26,11 +26,13 @@ export default function HadithMenu() {
 
   useEffect(() => {
     const previous = document.body.style.overflow;
+    const onOpen = () => setOpen(true);
     const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setOpen(false); };
     document.addEventListener("keydown", onKey);
+    window.addEventListener("nur:open-menu", onOpen);
     document.body.style.overflow = open ? "hidden" : previous;
     if (open) window.setTimeout(() => closeButtonRef.current?.focus(), 80);
-    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = previous; };
+    return () => { document.removeEventListener("keydown", onKey); window.removeEventListener("nur:open-menu", onOpen); document.body.style.overflow = previous; };
   }, [open]);
 
   const close = () => setOpen(false);
