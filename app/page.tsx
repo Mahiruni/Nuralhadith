@@ -4,6 +4,7 @@ import {useEffect,useState} from "react";
 import {collections} from "../lib/collections";
 import {useLanguage} from "../components/LanguageProvider";
 import AppHeader from "../components/AppHeader";
+import Icon from "../components/Icon";
 
 type H={arabic:string;english?:string;number?:string|number;grade?:string;source?:string;narrator?:string;collection?:string};
 
