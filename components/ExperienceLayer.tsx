@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Icon from "./Icon";
 
@@ -11,6 +12,7 @@ function gentleHaptic(kind: "light" | "success" = "light") {
 }
 
 export default function ExperienceLayer() {
+  const pathname = usePathname();
   const [progress, setProgress] = useState(0);
   const [toast, setToast] = useState("");
 
@@ -57,5 +59,22 @@ export default function ExperienceLayer() {
     <div className="reading-progress" style={{ transform: `scaleX(${progress / 100})` }} aria-hidden="true" />
     <a className="skip-link" href="#main-content">Skip to content</a>
     {toast && <div className="experience-toast" role="status" aria-live="polite">{toast}</div>}
+    <nav className="docked-nav" aria-label="Quick navigation">
+      <Link href="/" className={pathname === "/" ? "active" : ""} aria-label="Home">
+        <Icon name="home" size={19}/><span>Home</span>
+      </Link>
+      <Link href="/collections" className={pathname.startsWith("/collections") ? "active" : ""} aria-label="Collections">
+        <Icon name="library" size={19}/><span>Collections</span>
+      </Link>
+      <Link href="/search" className={pathname.startsWith("/search") ? "active" : ""} aria-label="Search">
+        <Icon name="search" size={19}/><span>Search</span>
+      </Link>
+      <Link href="/library" className={pathname.startsWith("/library") ? "active" : ""} aria-label="Saved hadiths">
+        <Icon name="bookmark" size={19}/><span>Saved</span>
+      </Link>
+      <button type="button" aria-label="More navigation" onClick={() => window.dispatchEvent(new CustomEvent("nur:open-menu"))}>
+        <Icon name="note" size={19}/><span>More</span>
+      </button>
+    </nav>
   </>;
 }
