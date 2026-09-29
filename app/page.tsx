@@ -18,6 +18,11 @@ export default function Home(){
   function toggleSave(){if(!h)return;const k=(h.collection||"")+"/"+h.number;const s=JSON.parse(localStorage.getItem("nur-saved")||"[]");const nextSaved=!s.includes(k);const n=nextSaved?[...s,k]:s.filter((x:string)=>x!==k);localStorage.setItem("nur-saved",JSON.stringify(n));setSaved(nextSaved);window.dispatchEvent(new CustomEvent("nur:toast",{detail:nextSaved?"Saved to your library":"Removed from your library"}))}
   return <main className="home">
     <header className="topbar">
+      <Link href="/" className="site-brand" aria-label="Nur al-Hadith home">
+        <span className="site-brand-arabic" dir="rtl">نور الحديث</span>
+        <span className="site-brand-name">Nur al-Hadith</span>
+        <span className="site-brand-tagline">Hadith Library</span>
+      </Link>
       <nav><Link href="/collections">{t("collections")}</Link><Link href="/search">{t("search")}</Link><Link href="/topics">Topics</Link><Link href="/library">{t("library")}</Link><Link href="/settings">{t("settings")}</Link></nav>
       <div className="header-tools">
         <LanguageSwitcher/>
