@@ -1,17 +1,14 @@
 'use client';
 
 import Link from "next/link";
+import AppHeader from "../../components/AppHeader";
 import { useLanguage } from "../../components/LanguageProvider";
-import LanguageSwitcher from "../../components/LanguageSwitcher";
 
 export default function SettingsPage() {
   const { t, locale } = useLanguage();
   return (
     <main className="shell">
-      <header className="pagebar">
-        <Link href="/" className="brand-link">← <span>Nur al-Hadith</span><small>نور الحديث</small></Link>
-        <LanguageSwitcher />
-      </header>
+      <AppHeader />
       <div className="page-content">
         <div className="eyebrow">{t("settings")}</div>
         <h1 className="page-title">{t("settings")}</h1>
