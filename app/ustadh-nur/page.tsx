@@ -32,8 +32,7 @@ export default function UstadhNurPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "السلام عليكم ورحمة الله وبركاته
-I am Ustadh Nur. Welcome, dear student. Ask me about the Qur’an, Salah, purification, duas, Aqidah or everyday Islamic practice. We will learn with evidence, mercy and practical steps.",
+      text: "السلام عليكم ورحمة الله وبركاته\nI am Ustadh Nur. Welcome, dear student. Ask me about the Qur’an, Salah, purification, duas, Aqidah or everyday Islamic practice. We will learn with evidence, mercy and practical steps.",
     },
   ]);
 
