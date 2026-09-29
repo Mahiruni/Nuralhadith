@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Icon from "./Icon";
 
 type Props={title?:string; onMore?:()=>void};
 
