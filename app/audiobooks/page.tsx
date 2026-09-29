@@ -1,106 +1,16 @@
-import Link from "next/link";
 import AppHeader from "../../components/AppHeader";
 
 const audiobooks = [
-  {
-    id: "bukhari",
-    title: "Ṣaḥīḥ al-Bukhārī",
-    arabic: "صحيح البخاري",
-    language: "Arabic",
-    source: "Muslim Dawah",
-    url: "https://cdn.muslimdawah.org/hadith-audio/Sahih_Al-Bukhari/",
-    note: "Chapter-by-chapter audiobook files.",
-  },
-  {
-    id: "muslim",
-    title: "Ṣaḥīḥ Muslim",
-    arabic: "صحيح مسلم",
-    language: "Arabic",
-    source: "Muslim Dawah",
-    url: "https://cdn.muslimdawah.org/hadith-audio/ar_Moslem_Reading/",
-    note: "Arabic reading audio available from the source.",
-  },
-  {
-    id: "abudawud",
-    title: "Sunan Abī Dāwūd",
-    arabic: "سنن أبي داود",
-    language: "Arabic",
-    source: "Muslim Dawah",
-    url: "https://cdn.muslimdawah.org/hadith-audio/ar_Abo_Dawood_audiobook/",
-    note: "Arabic audiobook files available from the source.",
-  },
-  {
-    id: "tirmidhi",
-    title: "Jāmiʿ at-Tirmidhī",
-    arabic: "جامع الترمذي",
-    language: "Arabic",
-    source: "Muslim Dawah",
-    url: "https://cdn.muslimdawah.org/hadith-audio/Jami_At-Tirmidhi/",
-    note: "Chapter-by-chapter audiobook files.",
-  },
-  {
-    id: "nasai",
-    title: "Sunan an-Nasāʾī",
-    arabic: "سنن النسائي",
-    language: "Arabic",
-    source: "Muslim Dawah",
-    url: "https://cdn.muslimdawah.org/hadith-audio/Sunan_An-Nasai/",
-    note: "Chapter-by-chapter audiobook files.",
-  },
-  {
-    id: "ibnmajah",
-    title: "Sunan Ibn Mājah",
-    arabic: "سنن ابن ماجه",
-    language: "Arabic",
-    source: "Muslim Dawah",
-    url: "https://cdn.muslimdawah.org/hadith-audio/Sunan_Ibn-Majah/",
-    note: "Chapter-by-chapter audiobook files.",
-  },
+  ["bukhari", "Ṣaḥīḥ al-Bukhārī", "صحيح البخاري", "https://cdn.muslimdawah.org/hadith-audio/Sahih_Al-Bukhari/", "Sahih_Al-Bukhari_01.mp3", "15+ streamed volume files"],
+  ["muslim", "Ṣaḥīḥ Muslim", "صحيح مسلم", "https://cdn.muslimdawah.org/hadith-audio/ar_Moslem_Reading/", "", "Streaming source"],
+  ["abudawud", "Sunan Abī Dāwūd", "سنن أبي داود", "https://cdn.muslimdawah.org/hadith-audio/ar_Abo_Dawood_audiobook/", "", "Streaming source"],
+  ["tirmidhi", "Jāmiʿ at-Tirmidhī", "جامع الترمذي", "https://cdn.muslimdawah.org/hadith-audio/Jami_At-Tirmidhi/", "", "Streaming source"],
+  ["nasai", "Sunan an-Nasāʾī", "سنن النسائي", "https://cdn.muslimdawah.org/hadith-audio/Sunan_An-Nasai/", "", "Streaming source"],
+  ["ibnmajah", "Sunan Ibn Mājah", "سنن ابن ماجه", "https://cdn.muslimdawah.org/hadith-audio/Sunan_Ibn-Majah/", "", "Streaming source"],
 ];
 
-export const metadata = {
-  title: "Hadith Audiobooks — Nur al-Hadith",
-  description: "Available external audiobook sources for major Hadith collections.",
-};
+export const metadata = { title: "Hadith Audiobooks — Nur al-Hadith", description: "Stream available Hadith audiobook recordings without downloading them into Nur al-Hadith." };
 
 export default function AudiobooksPage() {
-  return (
-    <main className="shell audio-library">
-      <AppHeader />
-      <header className="pagebar audio-page-title">
-        <div>
-          <span className="eyebrow">AUDIO</span>
-          <h1>Hadith Audiobooks</h1>
-          <p>Listen to available recordings while keeping the Hadith text and references in Nur al-Hadith.</p>
-        </div>
-        <Link className="quiet-link" href="/collections">Browse collections →</Link>
-      </header>
-
-      <section className="audio-grid" aria-label="Available Hadith audiobooks">
-        {audiobooks.map(book => (
-          <article className="audio-card" key={book.id}>
-            <div className="audio-card-top">
-              <span className="audio-icon" aria-hidden="true">▶</span>
-              <span className="audio-language">{book.language}</span>
-            </div>
-            <h2>{book.title}</h2>
-            <div className="audio-arabic" dir="rtl">{book.arabic}</div>
-            <p>{book.note}</p>
-            <div className="audio-card-foot">
-              <span>Source: {book.source}</span>
-              <a href={book.url} target="_blank" rel="noopener noreferrer">Listen ↗</a>
-            </div>
-          </article>
-        ))}
-      </section>
-
-      <section className="audio-note">
-        <strong>Source-aware audio</strong>
-        <p>
-          These recordings are opened from their original public source rather than copied into the Nur al-Hadith repository.
-          Per-Hadith in-app audio will only be marked as available when redistribution or streaming permission is verified.
-        </p>
-      </section>
-    </main>
-  );
+  return <main className="shell audio-library"><AppHeader /><header className="pagebar audio-page-title"><div><span className="eyebrow">AUDIO</span><h1>Hadith Audiobooks</h1><p>Stream available recordings directly from their original public audio sources.</p></div></header><section className="audio-grid" aria-label="Available Hadith audiobooks">{audiobooks.map(([id,title,arabic,url,file,note]) => <article className="audio-card" key={id}><div className="audio-card-top"><span className="audio-icon" aria-hidden="true">▶</span><span className="audio-language">STREAM</span></div><h2>{title}</h2><div className="audio-arabic" dir="rtl">{arabic}</div><p>{note}. Audio stays hosted by the original source; Nur al-Hadith does not download or store it.</p><div className="audio-card-foot"><span>External streaming</span><a href={file ? `${url}${file}` : url} target="_blank" rel="noopener noreferrer">Listen ↗</a></div></article>)}</section><section className="audio-note"><strong>Streaming only</strong><p>Nur al-Hadith does not copy these recordings into the repository or Vercel deployment. The player/source opens the original hosted audio, keeping the app lightweight. Availability depends on the source.</p></section></main>;
 }
