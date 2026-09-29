@@ -49,8 +49,7 @@ export default function HadithMenu() {
           aria-label="Nur al-Hadith navigation" aria-hidden={!open}>
           <div className={styles.head}>
             <div className={styles.identity}>
-              <div className={styles.logoMark} aria-hidden="true">ن</div>
-              <div><span className="eyebrow">نور الحديث</span><h2>Nur al-Hadith</h2><p>Hadith Library</p></div>
+              <div className={styles.identityText}><span className={styles.arabicName}>نور الحديث</span><h2>Nur al-Hadith</h2><p>Hadith Library</p></div>
             </div>
             <button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label="Close menu" tabIndex={open ? 0 : -1}>
               <Icon name="close" size={20}/>
