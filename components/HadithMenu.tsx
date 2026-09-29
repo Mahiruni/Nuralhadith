@@ -42,7 +42,7 @@ export default function HadithMenu() {
         aria-label={open ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={open} aria-controls="hadith-menu-drawer">
         <span className={`${styles.lines} ${open ? styles.linesOpen : ""}`} aria-hidden="true"><i/><i/><i/></span>
-        <span className={styles.label}>Menu</span>
+        
       </button>
 
       <div className={`${styles.layer} ${open ? styles.open : ""}`} aria-hidden={!open}>
@@ -50,10 +50,7 @@ export default function HadithMenu() {
         <aside id="hadith-menu-drawer" className={styles.drawer} role="dialog" aria-modal="true"
           aria-label="Nur al-Hadith navigation" aria-hidden={!open}>
           <div className={styles.head}>
-            <div className={styles.identity}>
-              <div className={styles.identityText}><span className={styles.arabicName}>نور الحديث</span><h2>Nur al-Hadith</h2><p>Hadith Library</p></div>
-            </div>
-            <button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label="Close menu" tabIndex={open ? 0 : -1}>
+            <div className={styles.identityText}><span className={styles.arabicName}>نور الحديث</span><h2>Nur al-Hadith</h2><p>Hadith Library</p></div><button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label="Close menu" tabIndex={open ? 0 : -1}>
               <Icon name="close" size={20}/>
             </button>
           </div>
@@ -78,8 +75,8 @@ export default function HadithMenu() {
           </div>
 
           <div className={styles.secondary}>
-            <div className={styles.sectionTitle}><span>More</span></div>
-            <Link href="/settings" onClick={close}><span>{t("settings")}</span></Link>
+            <div className={styles.sectionTitle}><span>App</span></div>
+            <Link href="/settings" onClick={close}><Icon name="note" size={21}/><span>{t("settings")}</span></Link>
             <Link href="/settings" onClick={close}><Icon name="language" size={21}/><span>{t("language")} / Appearance</span></Link>
             <div className={styles.offline}><Icon name="info" size={21}/><span>Offline mode</span><span className={styles.offlineDot}/></div>
             <Link href="/sources" onClick={close}><Icon name="info" size={21}/><span>Sources & Methodology</span></Link>
