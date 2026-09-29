@@ -42,7 +42,6 @@ export default function HadithMenu() {
         aria-label={open ? "Close navigation menu" : "Open navigation menu"}
         aria-expanded={open} aria-controls="hadith-menu-drawer">
         <span className={`${styles.lines} ${open ? styles.linesOpen : ""}`} aria-hidden="true"><i/><i/><i/></span>
-        
       </button>
 
       <div className={`${styles.layer} ${open ? styles.open : ""}`} aria-hidden={!open}>
@@ -50,7 +49,8 @@ export default function HadithMenu() {
         <aside id="hadith-menu-drawer" className={styles.drawer} role="dialog" aria-modal="true"
           aria-label="Nur al-Hadith navigation" aria-hidden={!open}>
           <div className={styles.head}>
-            <div className={styles.identityText}><span className={styles.arabicName}>نور الحديث</span><h2>Nur al-Hadith</h2><p>Hadith Library</p></div><button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label="Close menu" tabIndex={open ? 0 : -1}>
+            <div className={styles.identityText}><h2>Nur al-Hadith</h2><p>Hadith Library</p></div>
+            <button ref={closeButtonRef} type="button" className={styles.close} onClick={close} aria-label="Close menu" tabIndex={open ? 0 : -1}>
               <Icon name="close" size={20}/>
             </button>
           </div>
@@ -64,9 +64,8 @@ export default function HadithMenu() {
           <div className={styles.section}>
             <div className={styles.sectionTitle}><span>Collections</span><small>{collections.length}</small></div>
             <nav className={styles.list} aria-label="Hadith collections">
-              {collections.map((collection, index) => (
+              {collections.map(collection => (
                 <Link key={collection.id} href={`/collections/${collection.id}`} onClick={close}>
-                  
                   <span className={styles.copy}><strong>{collection.name}</strong><small dir="rtl">{collection.arabic}</small></span>
                   <span className={styles.count}>{collection.count.toLocaleString()}</span>
                 </Link>
@@ -83,7 +82,7 @@ export default function HadithMenu() {
             <Link href="/report" onClick={close}><Icon name="heart" size={21}/><span>Support Nur al-Hadith</span></Link>
           </div>
 
-          <div className={styles.footer}><span>نور الحديث · Read with purpose</span><small>Nur al-Hadith · v1.0</small></div>
+          <div className={styles.footer}><span>Nur al-Hadith · Read with purpose</span><small>Nur al-Hadith · v1.0</small></div>
         </aside>
       </div>
     </>
