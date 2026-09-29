@@ -5,6 +5,7 @@ import {collections} from "../lib/collections";
 import {useLanguage} from "../components/LanguageProvider";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 import Icon from "../components/Icon";
+import HadithMenu from "../components/HadithMenu";
 
 type H={arabic:string;english?:string;number?:string|number;grade?:string;source?:string;narrator?:string;collection?:string};
 
@@ -16,11 +17,10 @@ export default function Home(){
   async function random(){setLoading(true);try{const r=await fetch("/api/random");if(!r.ok)throw new Error();const d=await r.json();const x=d.hadith||d;setH(x);localStorage.setItem("nur-last",JSON.stringify(x))}catch{}finally{setLoading(false)}}
   useEffect(()=>{if(!h)random();else setLoading(false)},[]);
   function toggleSave(){if(!h)return;const k=(h.collection||"")+"/"+h.number;const s=JSON.parse(localStorage.getItem("nur-saved")||"[]");const nextSaved=!s.includes(k);const n=nextSaved?[...s,k]:s.filter((x:string)=>x!==k);localStorage.setItem("nur-saved",JSON.stringify(n));setSaved(nextSaved);window.dispatchEvent(new CustomEvent("nur:toast",{detail:nextSaved?"Saved to your library":"Removed from your library"}))}
-  const translationLabel=locale==="en"?t("translation"):t("translation");
   return <main className="home">
     <header className="topbar">
       <Link href="/" className="brand"><span aria-hidden="true"><Icon name="library" size={15}/></span><div><b>Nur al-Hadith</b><small>نور الحديث</small></div></Link>
-      <nav><Link href="/collections">{t("collections")}</Link><Link href="/search">{t("search")}</Link><Link href="/topics">Topics</Link><Link href="/library">{t("library")}</Link><Link href="/settings">{t("settings")}</Link><LanguageSwitcher/><button className="icon-button" onClick={()=>setDark(!dark)} aria-label={t("theme")}><Icon name={dark?"sun":"moon"} size={17}/></button></nav>
+      <nav><Link href="/collections">{t("collections")}</Link><Link href="/search">{t("search")}</Link><Link href="/topics">Topics</Link><Link href="/library">{t("library")}</Link><Link href="/settings">{t("settings")}</Link><LanguageSwitcher/><button className="icon-button" onClick={()=>setDark(!dark)} aria-label={t("theme")}><Icon name={dark?"sun":"moon"} size={17}/></button><HadithMenu/></nav>
     </header>
     <section className="home-hero"><div><div className="eyebrow">نور الحديث · A DIGITAL HADITH LIBRARY</div><h1>Read the Sunnah<br/><em>with presence.</em></h1><p>A quiet, carefully structured place to read Arabic hadith and verified translations across eight major collections.</p><div className="hero-actions"><Link href="/collections" className="primary">{t("explore")}</Link><button className="secondary" onClick={random}><span>{t("random")}</span><Icon name="arrowUpRight" size={14}/></button></div></div><div className="hero-mark" aria-hidden="true">ﷺ</div></section>
     <section className="daily"><div className="section-head"><div><span className="eyebrow">{t("today")}</span><h2>{t("dailyTitle")}</h2></div><button className="icon-action" onClick={random}><span>{loading?t("loading"):t("another")}</span><Icon name="refresh" size={14}/></button></div>
