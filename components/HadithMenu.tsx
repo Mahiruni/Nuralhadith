@@ -16,6 +16,7 @@ const primary: MenuItem[] = [
   { href: "/search", label: "Search Hadith", icon: "search" },
   { href: "/?daily=1", label: "Daily Hadith", icon: "save" },
   { href: "/topics", label: "Topics", icon: "note" },
+  { href: "/audiobooks", label: "Hadith Audiobooks", icon: "library" },
 ];
 
 export default function HadithMenu() {
