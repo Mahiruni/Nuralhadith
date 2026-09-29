@@ -291,10 +291,12 @@ button:disabled{cursor:not-allowed;opacity:.58}
 }
 
 
-/* Header controls: left side, aligned beside the global hamburger */
+
+
+/* Header controls: pinned to the far right */
 .topbar{padding-left:78px}
-.topbar .header-tools{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.topbar .header-tools{display:flex;align-items:center;gap:8px;flex:0 0 auto;margin-left:auto}
 .topbar .header-tools .language-switcher{display:flex;align-items:center}
-.topbar>nav{margin-left:auto}
-@media(max-width:850px){.topbar{padding-left:78px}.topbar>nav{display:none}.topbar .header-tools{margin-left:0}}
+.topbar>nav{margin-left:0}
+@media(max-width:850px){.topbar{padding-left:78px}.topbar>nav{display:none}.topbar .header-tools{margin-left:auto}}
 @media(max-width:560px){.topbar{height:66px;padding-left:74px;padding-right:14px}.topbar .header-tools{gap:6px}.topbar .header-tools .language-switcher select{height:34px}}
