@@ -6,7 +6,7 @@ import {readOfflineAudio} from "../lib/offlineDb";
 type Track={id:string;book:string;number:string;language:"ar"|"en"|"am"|"ti"|"om";label:string;url:string};
 type Ctx={
  track:Track|null;queue:Track[];mode:AudioMode;playing:boolean;position:number;duration:number;speed:number;sleepUntil:number|null;
- playTrack:(track:Track,mode?:AudioMode)=>Promise<void>;toggle:()=>Promise<void>;seek:(value:number)=>void;setSpeed:(value:number)=>void;setSleep:(minutes:number|null)=>void;
+ playTrack:(track:Track,mode?:AudioMode)=>Promise<void>;toggle:()=>Promise<void>;seek:(value:number)=>void;setSpeed:(value:number)=>void;setSleep:(minutes:number|null)=>void;downloadCurrent:()=>Promise<void>;
  next:()=>Promise<void>;previous:()=>Promise<void>;stop:()=>void;
 };
 const AudioContext=createContext<Ctx|null>(null);
@@ -23,13 +23,14 @@ export function AudioProvider({children}:{children:React.ReactNode}){
  const[duration,setDuration]=useState(0);
  const[speed,setSpeedState]=useState(1);
  const[sleepUntil,setSleepUntil]=useState<number|null>(null);
+ const sleepUntilRef=useRef<number|null>(null);
 
  useEffect(()=>{
    const a=new Audio();
    a.preload="metadata";
    a.setAttribute("playsinline","");
    ref.current=a;
-   const tick=()=>{setPosition(a.currentTime);if(sleepUntil&&Date.now()>=sleepUntil){a.pause();setPlaying(false);setSleepUntil(null)}};
+   const tick=()=>{setPosition(a.currentTime);const deadline=sleepUntilRef.current;if(deadline&&Date.now()>=deadline){a.pause();setPlaying(false);sleepUntilRef.current=null;setSleepUntil(null)}};
    const meta=()=>setDuration(Number.isFinite(a.duration)?a.duration:0);
    const onPlay=()=>setPlaying(true);
    const onPause=()=>setPlaying(false);
@@ -76,7 +77,13 @@ export function AudioProvider({children}:{children:React.ReactNode}){
 
  const seek=useCallback((v:number)=>{const a=ref.current;if(a){a.currentTime=Math.max(0,v);setPosition(Math.max(0,v))}},[]);
  const setSpeed=useCallback((v:number)=>{const n=Math.max(.75,Math.min(1.5,v));setSpeedState(n);if(ref.current)ref.current.playbackRate=n},[]);
- const setSleep=useCallback((minutes:number|null)=>setSleepUntil(minutes?Date.now()+minutes*60000:null),[]);
+ const setSleep=useCallback((minutes:number|null)=>{const deadline=minutes?Date.now()+minutes*60000:null;sleepUntilRef.current=deadline;setSleepUntil(deadline)},[]);
+ const downloadCurrent=useCallback(async()=>{
+   const t=track;if(!t)throw new Error("No audio selected");
+   const offline=await readOfflineAudio(t.id).catch(()=>null);
+   const blob=offline||await fetch(t.url).then(r=>{if(!r.ok)throw new Error("Download unavailable");return r.blob()});
+   const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=t.book+"-"+t.number+"-"+t.language+".mp3";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ },[track]);
  const next=useCallback(async()=>{
    if(!track)return;
    const i=queue.findIndex(x=>x.id===track.id);
@@ -96,7 +103,7 @@ export function AudioProvider({children}:{children:React.ReactNode}){
 
  useEffect(()=>{const a=ref.current;if(!a)return;const onEnded=async()=>{const i=track?queue.findIndex(x=>x.id===track.id):-1;const candidate=i>=0?queue[i+1]:undefined;if(candidate)await playTrack(candidate,mode);};a.addEventListener("ended",onEnded);return()=>a.removeEventListener("ended",onEnded)},[track,queue,mode,playTrack]);
 
- const value=useMemo(()=>({track,queue,mode,playing,position,duration,speed,sleepUntil,playTrack,toggle,seek,setSpeed,setSleep,next,previous,stop}),[track,queue,mode,playing,position,duration,speed,sleepUntil,playTrack,toggle,seek,setSpeed,setSleep,next,previous,stop]);
+ const value=useMemo(()=>({track,queue,mode,playing,position,duration,speed,sleepUntil,playTrack,toggle,seek,setSpeed,setSleep,downloadCurrent,next,previous,stop}),[track,queue,mode,playing,position,duration,speed,sleepUntil,playTrack,toggle,seek,setSpeed,setSleep,downloadCurrent,next,previous,stop]);
  return <AudioContext.Provider value={value}>{children}</AudioContext.Provider>
 }
 export function useAudio(){const c=useContext(AudioContext);if(!c)throw new Error("useAudio must be used inside AudioProvider");return c}
