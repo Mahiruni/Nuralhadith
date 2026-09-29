@@ -1,7 +1,5 @@
 'use client';
 
-import Link from "next/link";
-import AppHeader from "../../components/AppHeader";
 import AppHeader from "../../components/AppHeader";
 import { useLanguage } from "../../components/LanguageProvider";
 import LanguageSwitcher from "../../components/LanguageSwitcher";
