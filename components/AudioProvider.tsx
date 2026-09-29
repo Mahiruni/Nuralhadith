@@ -38,7 +38,7 @@ export function AudioProvider({children}:{children:React.ReactNode}){
    a.addEventListener("timeupdate",tick);a.addEventListener("loadedmetadata",meta);a.addEventListener("play",onPlay);a.addEventListener("pause",onPause);a.addEventListener("ended",onEnded);
    try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s?.speed)setSpeedState(s.speed)}catch{}
    return()=>{a.pause();a.removeEventListener("timeupdate",tick);a.removeEventListener("loadedmetadata",meta);a.removeEventListener("play",onPlay);a.removeEventListener("pause",onPause);a.removeEventListener("ended",onEnded);if(objectUrlRef.current)URL.revokeObjectURL(objectUrlRef.current);a.src=""};
- },[sleepUntil]);
+ },[]);
 
  useEffect(()=>{try{localStorage.setItem(KEY,JSON.stringify({track,mode,position,speed,queue}))}catch{}},[track,mode,position,speed,queue]);
 
