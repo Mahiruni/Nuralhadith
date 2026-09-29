@@ -7,16 +7,15 @@ import Icon from "./Icon";
 import { useLanguage } from "./LanguageProvider";
 import styles from "./HadithMenu.module.css";
 
-type MenuItem = { href: string; label: string; icon: "home"|"library"|"search"|"bookmark"|"note"|"save" };
-
+type MenuItem = { href: string; label: string; icon: "home"|"library"|"search"|"bookmark"|"note"|"save"|"compass"|"headphones"|"bell" };
 const primary: MenuItem[] = [
   { href: "/", label: "Home", icon: "home" },
-  { href: "/collections", label: "Browse Collections", icon: "library" },
-  { href: "/library", label: "Bookmarks & Favorites", icon: "bookmark" },
-  { href: "/search", label: "Search Hadith", icon: "search" },
-  { href: "/?daily=1", label: "Daily Hadith", icon: "save" },
-  { href: "/topics", label: "Topics", icon: "note" },
-  { href: "/audiobooks", label: "Hadith Audiobooks", icon: "library" },
+  { href: "/search", label: "Search", icon: "search" },
+  { href: "/collections", label: "Collections", icon: "library" },
+  { href: "/topics", label: "Topics", icon: "compass" },
+  { href: "/library", label: "My Library", icon: "bookmark" },
+  { href: "/?daily=1", label: "Daily Hadith", icon: "bell" },
+  { href: "/audiobooks", label: "Audiobooks", icon: "headphones" },
 ];
 
 export default function HadithMenu() {
@@ -59,25 +58,18 @@ export default function HadithMenu() {
             </button>
           </div>
 
-          <div className={styles.profile}>
-            <div className={styles.avatar}>ن</div>
-            <div className={styles.profileCopy}><strong>Welcome back</strong><span>Continue reading</span></div>
-            <span className={styles.progressBadge} aria-label="Reading progress 0%">0%</span>
-            <div className={styles.progress}><span style={{width:"0%"}}/></div>
-          </div>
-
           <nav className={styles.nav} aria-label="Primary navigation">
             {primary.map(item => <Link key={item.href} href={item.href} onClick={close}>
-              <span className={styles.iconWrap}><Icon name={item.icon} size={19}/></span><span>{item.label}</span><span className={styles.chevron}>›</span>
+              <Icon name={item.icon} size={21}/><span>{item.label}</span>
             </Link>)}
           </nav>
 
           <div className={styles.section}>
-            <div className={styles.sectionTitle}><span>Hadith Collections</span><small>{collections.length} collections</small></div>
+            <div className={styles.sectionTitle}><span>Collections</span><small>{collections.length}</small></div>
             <nav className={styles.list} aria-label="Hadith collections">
               {collections.map((collection, index) => (
                 <Link key={collection.id} href={`/collections/${collection.id}`} onClick={close}>
-                  <span className={styles.number}>{String(index + 1).padStart(2,"0")}</span>
+                  
                   <span className={styles.copy}><strong>{collection.name}</strong><small dir="rtl">{collection.arabic}</small></span>
                   <span className={styles.count}>{collection.count.toLocaleString()}</span>
                 </Link>
@@ -87,11 +79,11 @@ export default function HadithMenu() {
 
           <div className={styles.secondary}>
             <div className={styles.sectionTitle}><span>More</span></div>
-            <Link href="/settings" onClick={close}><span className={styles.iconWrap}><Icon name="library" size={18}/></span><span>{t("settings")}</span></Link>
-            <Link href="/settings" onClick={close}><span className={styles.iconWrap}><Icon name="sun" size={18}/></span><span>{t("language")} / Theme</span></Link>
-            <div className={styles.offline}><span className={styles.iconWrap}><Icon name="bookmark" size={18}/></span><span>Offline mode</span><span className={styles.offlineDot}/></div>
-            <Link href="/sources" onClick={close}><span className={styles.iconWrap}><Icon name="note" size={18}/></span><span>About & Sources</span></Link>
-            <Link href="/report" onClick={close}><span className={styles.iconWrap}><Icon name="share" size={18}/></span><span>Support / Report</span></Link>
+            <Link href="/settings" onClick={close}><span>{t("settings")}</span></Link>
+            <Link href="/settings" onClick={close}><Icon name="language" size={21}/><span>{t("language")} / Appearance</span></Link>
+            <div className={styles.offline}><Icon name="info" size={21}/><span>Offline mode</span><span className={styles.offlineDot}/></div>
+            <Link href="/sources" onClick={close}><Icon name="info" size={21}/><span>Sources & Methodology</span></Link>
+            <Link href="/report" onClick={close}><Icon name="heart" size={21}/><span>Support Nur al-Hadith</span></Link>
           </div>
 
           <div className={styles.footer}><span>نور الحديث · Read with purpose</span><small>Nur al-Hadith · v1.0</small></div>
