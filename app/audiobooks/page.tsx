@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AppHeader from "../../components/AppHeader";
 
 const audiobooks = [
   {
@@ -65,7 +66,8 @@ export const metadata = {
 export default function AudiobooksPage() {
   return (
     <main className="shell audio-library">
-      <header className="pagebar">
+      <AppHeader />
+      <header className="pagebar audio-page-title">
         <div>
           <span className="eyebrow">AUDIO</span>
           <h1>Hadith Audiobooks</h1>
