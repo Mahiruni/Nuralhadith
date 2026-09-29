@@ -39,6 +39,7 @@ export default function AppHeader() {
           <Link href="/topics">Topics</Link>
           <Link href="/library">{t("library")}</Link>
           <Link href="/audiobooks">Audio</Link>
+          <Link href="/ustadh-nur" className="ustadh-nav-link">Ustadh Nur</Link>
         </nav>
 
         <div className="app-header-tools">
