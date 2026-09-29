@@ -580,3 +580,64 @@ button:disabled{cursor:not-allowed;opacity:.58}
 @media(prefers-reduced-motion:reduce){
   .thread-header-action{transition:none!important}
 }
+
+
+/* Unified navigation theme: HeaderMenu + FooterMenu */
+:root{
+  --nav-surface:#0D4F3C;
+  --nav-foreground:#F9F6F0;
+  --nav-muted:#DCE9E3;
+  --nav-border:rgba(249,246,240,.16);
+}
+[data-theme="dark"]{
+  --nav-surface:#1B1B1B;
+  --nav-foreground:#F5F5F5;
+  --nav-muted:#D0D0D0;
+  --nav-border:rgba(255,255,255,.12);
+}
+.app-header{
+  background:var(--nav-surface)!important;
+  border-bottom:1px solid var(--nav-border)!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.app-header .site-brand-name,
+.app-header .site-brand-tagline,
+.app-header .app-header-nav a,
+.app-header .app-header-nav a:hover,
+.app-header .app-header-tools .icon-button{
+  color:var(--nav-foreground);
+}
+.app-header .site-brand-tagline{border-left-color:var(--nav-border);}
+.app-header .app-header-nav a{opacity:.9;}
+.app-header .app-header-nav a:hover{opacity:1;}
+.app-header .app-header-nav a:after{background:var(--gold);}
+.app-header .app-header-tools .icon-button{
+  background:transparent!important;
+  border-color:transparent!important;
+}
+.app-header .app-header-tools .icon-button:hover{
+  background:rgba(249,246,240,.1)!important;
+  border-color:var(--nav-border)!important;
+  color:var(--gold)!important;
+}
+.app-header .language-switcher select{
+  background-color:var(--nav-surface);
+  color:var(--nav-foreground);
+  border-color:var(--nav-border);
+}
+@media(max-width:850px){
+  .docked-nav{
+    background:var(--nav-surface)!important;
+    border-top:1px solid var(--nav-border)!important;
+    box-shadow:none!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .docked-nav a,
+  [data-theme="dark"] .docked-nav a{color:var(--nav-muted);}
+  .docked-nav a.active,
+  [data-theme="dark"] .docked-nav a.active{color:var(--nav-foreground);}
+  .docked-nav a.active .ui-icon{color:var(--gold);}
+}
