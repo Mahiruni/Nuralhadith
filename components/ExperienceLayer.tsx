@@ -59,22 +59,22 @@ export default function ExperienceLayer() {
     <div className="reading-progress" style={{ transform: `scaleX(${progress / 100})` }} aria-hidden="true" />
     <a className="skip-link" href="#main-content">Skip to content</a>
     {toast && <div className="experience-toast" role="status" aria-live="polite">{toast}</div>}
-    <nav className="docked-nav" aria-label="Quick navigation">
+    <nav className="docked-nav" aria-label="Primary navigation">
       <Link href="/" className={pathname === "/" ? "active" : ""} aria-label="Home">
-        <Icon name="home" size={19}/><span>Home</span>
+        <Icon name="home" size={23}/>
       </Link>
-      <Link href="/collections" className={pathname.startsWith("/collections") ? "active" : ""} aria-label="Collections">
-        <Icon name="library" size={19}/><span>Collections</span>
+      <Link href="/search" className={pathname.startsWith("/search") ? "active" : ""} aria-label="Explore and search">
+        <Icon name="search" size={23}/>
       </Link>
-      <Link href="/search" className={pathname.startsWith("/search") ? "active" : ""} aria-label="Search">
-        <Icon name="search" size={19}/><span>Search</span>
+      <Link href="/collections" className={pathname.startsWith("/collections") || pathname.startsWith("/topics") ? "active" : ""} aria-label="Collections and topics">
+        <Icon name="library" size={23}/>
       </Link>
-      <Link href="/library" className={pathname.startsWith("/library") ? "active" : ""} aria-label="Saved hadiths">
-        <Icon name="bookmark" size={19}/><span>Saved</span>
+      <Link href="/#daily" className="daily-tab" aria-label="Daily Hadith">
+        <Icon name="bell" size={23}/>
       </Link>
-      <button type="button" aria-label="More navigation" onClick={() => window.dispatchEvent(new CustomEvent("nur:open-menu"))}>
-        <Icon name="note" size={19}/><span>More</span>
-      </button>
+      <Link href="/settings" className={pathname.startsWith("/settings") ? "active" : ""} aria-label="Profile">
+        <Icon name="person" size={23}/>
+      </Link>
     </nav>
   </>;
 }
