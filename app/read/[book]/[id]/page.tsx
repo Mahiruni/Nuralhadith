@@ -5,7 +5,7 @@ import {useParams} from "next/navigation";
 import {collections} from "../../../../lib/collections";
 import type {Hadith} from "../../../../lib/types";
 import {useLanguage} from "../../../../components/LanguageProvider";
-import LanguageSwitcher from "../../../../components/LanguageSwitcher";
+import AppHeader from "../../../../components/AppHeader";
 import {getVerifiedTranslation} from "../../../../lib/verifiedTranslations";
 import {GRADE_INFO,normalizeGrade,SOURCE_VERSION} from "../../../../lib/trust";
 import {readOfflineBook} from "../../../../lib/offlineDb";
@@ -36,10 +36,10 @@ export default function Reader(){
  <details><summary>{t("isnad")}</summary><p>{x.isnad||t("noIsnad")}</p></details>
  <button className="share-inline" onClick={()=>share(x)}>{t("share")}</button>
  </article>}
- return <main className="shell reader-shell"><header className="readerbar"><Link href={c?"/collections/"+book:"/collections"} className="brand-link">← <span>{c?.name||t("collections")}</span></Link><div className="reader-actions"><LanguageSwitcher/><button onClick={()=>setContinuous(!continuous)}>{continuous?t("single"):t("continuous")}</button><button onClick={toggleSave}>{saved?"★ "+t("saved"):"☆ "+t("save")}</button></div></header>
+ return <main className="shell reader-shell"><AppHeader />
  <div className="reader" aria-live="polite"><div className="eyebrow">{c?.name||book}</div>{loading&&<div className="skeleton"><span/><span/><span/></div>}{error&&<div className="error-box">{error}<button onClick={()=>setRetry(x=>x+1)}>{t("tryAgain")}</button></div>}
  {h&&<><div className="reader-title"><span>{t("readHadith")} {h.number}</span><span>{h.grade||t("gradeNotSupplied")}</span></div>{continuous&&chapter.length?chapter.map(x=><div key={String(x.number)} className="continuous-item"><Card x={x}/></div>):<Card x={h}/>}
- <div className="reader-controls"><button className={mode==="arabic"?"active":""} onClick={()=>setMode("arabic")}>{t("original")}</button><button className={mode==="bilingual"?"active":""} onClick={()=>setMode("bilingual")}>{t("bilingual")}</button><button className={mode==="translation"?"active":""} onClick={()=>setMode("translation")}>{t("translation")}</button><button onClick={()=>setSize(Math.max(.8,size-.1))} aria-label={t("decrease")}>A−</button><button onClick={()=>setSize(Math.min(1.5,size+.1))} aria-label={t("increase")}>A+</button><button onClick={()=>share()}>{t("share")}</button><button onClick={()=>window.print()}>{t("printPdf")}</button></div>
+ <div className="reader-controls"><button onClick={()=>setContinuous(!continuous)}>{continuous?t("single"):t("continuous")}</button><button onClick={toggleSave}>{saved?"★ "+t("saved"):"☆ "+t("save")}</button><button className={mode==="arabic"?"active":""} onClick={()=>setMode("arabic")}>{t("original")}</button><button className={mode==="bilingual"?"active":""} onClick={()=>setMode("bilingual")}>{t("bilingual")}</button><button className={mode==="translation"?"active":""} onClick={()=>setMode("translation")}>{t("translation")}</button><button onClick={()=>setSize(Math.max(.8,size-.1))} aria-label={t("decrease")}>A−</button><button onClick={()=>setSize(Math.min(1.5,size+.1))} aria-label={t("increase")}>A+</button><button onClick={()=>share()}>{t("share")}</button><button onClick={()=>window.print()}>{t("printPdf")}</button></div>
  <section className="note-panel"><div><div className="eyebrow">{t("privateNote")}</div><h2>{t("studyNarration")}</h2><p>{t("noteStored")}</p></div><textarea value={note} onChange={e=>setNote(e.target.value)} placeholder={t("notePlaceholder")}/></section>
  <AudioPlayer book={book} number={h.number} onPrevious={()=>{window.location.href="/read/"+book+"/"+prev}} onNext={()=>{window.location.href="/read/"+book+"/"+next}}/><StudyTools book={book} number={h.number} arabic={h.arabic} english={h.english}/><nav className="prev-next"><Link href={"/read/"+book+"/"+prev}>← {t("previous")}</Link><span>{t("readHadith")} {h.number}</span><Link href={"/read/"+book+"/"+next}>{t("next")} →</Link></nav>
  </>}</div></main>}
