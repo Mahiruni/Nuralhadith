@@ -81,7 +81,7 @@ export function AudioProvider({children}:{children:React.ReactNode}){
  const downloadCurrent=useCallback(async()=>{
    const t=track;if(!t)throw new Error("No audio selected");
    const offline=await readOfflineAudio(t.id).catch(()=>null);
-   const blob=offline||await fetch(t.url).then(r=>{if(!r.ok)throw new Error("Download unavailable");return r.blob()});
+   const blob:Blob=offline ?? await fetch(t.url).then(r=>{if(!r.ok)throw new Error("Download unavailable");return r.blob()});
    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=t.book+"-"+t.number+"-"+t.language+".mp3";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
  },[track]);
  const next=useCallback(async()=>{
