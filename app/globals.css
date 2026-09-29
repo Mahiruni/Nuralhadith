@@ -300,3 +300,25 @@ button:disabled{cursor:not-allowed;opacity:.58}
 .topbar>nav{margin-left:0}
 @media(max-width:850px){.topbar{padding-left:78px}.topbar>nav{display:none}.topbar .header-tools{margin-left:auto}}
 @media(max-width:560px){.topbar{height:66px;padding-left:74px;padding-right:14px}.topbar .header-tools{gap:6px}.topbar .header-tools .language-switcher select{height:34px}}
+
+/* Hadith audiobook library */
+.audio-library{min-height:100vh;padding-bottom:90px}
+.audio-library .pagebar{height:auto;min-height:190px;padding-top:46px;padding-bottom:38px;align-items:end}
+.audio-library .pagebar h1{margin:9px 0 10px;color:var(--emerald-deep);font-size:clamp(32px,5vw,52px);letter-spacing:-.04em}
+.audio-library .pagebar p{max-width:650px;margin:0;color:var(--muted);font-size:13px;line-height:1.8}
+.audio-grid{max-width:1220px;margin:0 auto;padding:42px 6vw 24px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.audio-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:245px}
+.audio-card-top,.audio-card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.audio-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--emerald-deep);color:#fff;font-size:12px}
+.audio-language{font-size:10px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase}
+.audio-card h2{font-size:19px;margin:25px 0 5px;color:var(--ink)}
+.audio-arabic{font-family:Amiri,serif;color:var(--gold);font-size:18px}
+.audio-card p{color:var(--muted);font-size:12px;line-height:1.7;margin:16px 0 22px}
+.audio-card-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:15px;font-size:10px;color:var(--muted)}
+.audio-card-foot a{color:var(--emerald-deep);font-weight:700}
+.audio-card-foot a:hover{color:var(--gold)}
+.audio-note{max-width:1220px;margin:10px auto 0;padding:0 6vw}
+.audio-note{color:var(--muted);font-size:11px;line-height:1.8}
+.audio-note strong{color:var(--ink)}
+@media(max-width:900px){.audio-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.audio-library .pagebar{padding:36px 20px 30px;display:block}.audio-library .pagebar .quiet-link{display:inline-block;margin-top:18px}.audio-grid{grid-template-columns:1fr;padding:28px 20px 18px}.audio-note{padding:0 20px}}
