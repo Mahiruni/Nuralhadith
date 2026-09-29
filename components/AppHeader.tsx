@@ -29,7 +29,6 @@ export default function AppHeader() {
     <header className="app-header">
       <div className="app-header-inner">
         <Link href="/" className="site-brand" aria-label="Nur al-Hadith home">
-          <span className="site-brand-arabic" dir="rtl">نور الحديث</span>
           <span className="site-brand-name">Nur al-Hadith</span>
           <span className="site-brand-tagline">Hadith Library</span>
         </Link>
