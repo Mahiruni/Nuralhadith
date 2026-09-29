@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/AppHeader";
 import { useLanguage } from "../../components/LanguageProvider";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
 
 export default function SettingsPage() {
   const { t, locale } = useLanguage();
