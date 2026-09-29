@@ -5,6 +5,7 @@ import ExperienceLayer from "../components/ExperienceLayer";
 import OfflineManager from "../components/OfflineManager";
 import {AudioProvider} from "../components/AudioProvider";
 import AudioMiniPlayer from "../components/AudioMiniPlayer";
+import HadithMenu from "../components/HadithMenu";
 
 export const metadata: Metadata = {
   title: "Nur al-Hadith — نور الحديث",
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <LanguageProvider>
           <AudioProvider><ExperienceLayer /><OfflineManager /><AudioMiniPlayer />
+          <HadithMenu />
           <div id="main-content">{children}</div></AudioProvider>
         </LanguageProvider>
       </body>
